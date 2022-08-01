@@ -1,11 +1,16 @@
-const fetchTopics = require("../models/news.model");
+const { fetchTopics, fetchArticle } = require("../models/news.model");
 
 const getTopics = (req, res) => {
-  console.log("hellp!");
-  fetchTopics().then((response) => {
-    console.log(response, "hey!!");
-    res.send(response);
+  fetchTopics().then((topics) => {
+    res.send(topics);
   });
 };
 
-module.exports = { getTopics };
+const getArticle = (req, res) => {
+  const id = req.params.article_id;
+  fetchArticle(id).then((response) => {
+    res.send({ response });
+  });
+};
+
+module.exports = { getTopics, getArticle };
