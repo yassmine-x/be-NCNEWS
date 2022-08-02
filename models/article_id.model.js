@@ -1,10 +1,4 @@
-const db = require("../db/connection.js");
-
-const fetchTopics = () => {
-  return db.query("SELECT * FROM topics").then(({ rows: topics }) => {
-    return { topics };
-  });
-};
+const db = require("../db/connection");
 
 const fetchArticle = (id) => {
   return db
@@ -14,8 +8,8 @@ const fetchArticle = (id) => {
         return Promise.reject({ status: 404, msg: "Article not found" });
       }
 
-      return article[0];
+      return article;
     });
 };
 
-module.exports = { fetchTopics, fetchArticle };
+module.exports = fetchArticle;

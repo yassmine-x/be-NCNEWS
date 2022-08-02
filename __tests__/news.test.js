@@ -63,7 +63,6 @@ describe("ERRORS FOR /api/articles/:article_id", () => {
       .get("/api/articles/999")
       .expect(404)
       .then(({ body }) => {
-        body;
         expect(body.msg).toBe("Article not found");
       });
   });

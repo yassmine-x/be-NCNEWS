@@ -1,17 +1,17 @@
 const express = require("express");
-const { getTopics, getArticle } = require("./controllers/news.controller");
+const getTopics = require("./controllers/topics.controller");
+const getArticle = require("./controllers/article_id.controller");
 const {
   errorNotFound,
   errorBadRequest,
   customError,
   devError,
 } = require("./errors");
-const checkIDexists = require("./models/checkIDexists");
 const app = express();
 
 app.get("/api/topics", getTopics);
 
-app.get("/api/articles/:article_id", getArticle, checkIDexists);
+app.get("/api/articles/:article_id", getArticle);
 
 /////////////////////////////////////////////////////////////////////////
 
