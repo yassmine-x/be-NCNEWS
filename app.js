@@ -1,6 +1,7 @@
 const express = require("express");
 const getTopics = require("./controllers/topics.controller");
 const getArticle = require("./controllers/article_id.controller");
+const patchVotes = require("./controllers/changeVote.controller");
 const {
   errorNotFound,
   errorBadRequest,
@@ -8,14 +9,19 @@ const {
   devError,
 } = require("./errors");
 const app = express();
+app.use(express.json());
 
 app.get("/api/topics", getTopics);
 
 app.get("/api/articles/:article_id", getArticle);
 
+app.patch("/api/articles/:article_id", patchVotes);
+
 /////////////////////////////////////////////////////////////////////////
 
 app.all("/*", errorNotFound);
+
+app.use(errorNotFound);
 
 app.use(errorBadRequest);
 
