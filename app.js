@@ -1,26 +1,26 @@
 const express = require("express");
 const { getTopics, getArticle } = require("./controllers/news.controller");
+const {
+  errorNotFound,
+  errorBadRequest,
+  customError,
+  devError,
+} = require("./errors");
+const checkIDexists = require("./models/checkIDexists");
 const app = express();
 
 app.get("/api/topics", getTopics);
 
-app.get("/api/articles/:article_id", getArticle);
+app.get("/api/articles/:article_id", getArticle, checkIDexists);
 
-app.use((err, req, res, next) => {
-  console.log(err);
-  res.sendStatus(500);
-});
+/////////////////////////////////////////////////////////////////////////
 
-app.use((err, req, res, next) => {
-  if (err.code === "22P02") {
-    res.status(400).send({ msg: "Bad Request!" });
-  } else {
-    next(err);
-  }
-});
+app.all("/*", errorNotFound);
 
-app.use((err, req, res, next) => {
-  res.status(err.status).send({ msg: err.msg });
-});
+app.use(errorBadRequest);
+
+app.use(customError);
+
+app.use(devError);
 
 module.exports = app;
