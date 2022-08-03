@@ -68,6 +68,7 @@ describe("ERRORS FOR /api/articles/:article_id", () => {
   });
 });
 
+
 describe("PATCH /api/articles/:article_id", () => {
   test("status:200, responds with the article", () => {
     const votesChange = { inc_votes: 100 };
@@ -120,7 +121,7 @@ describe("ERRORS FOR PATCH/api/articles/:article_id", () => {
         expect(body.msg).toBe("Bad Request!");
       });
   });
-  test("responds with 400 if invalid patch type is passed, missing required fields", () => {
+  test("responds with 407 if invalid patch type is passed, missing required fields", () => {
     const votesChange = {};
     return request(app)
       .patch("/api/articles/1")
@@ -128,6 +129,24 @@ describe("ERRORS FOR PATCH/api/articles/:article_id", () => {
       .expect(407)
       .then(({ body }) => {
         expect(body.msg).toBe("Please enter a vote");
+
       });
   });
 });
+
+describe("GET/api/users", () => {
+  test("status:200 responds with all the users", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then(({ body }) => {
+        const { users } = body;
+        expect(Array.isArray(users)).toBe(true);
+        expect(users).toHaveLength(4);
+        expect(
+          users.every((user) => {
+            user.hasOwnProperty("slug") &&
+              user.hasOwnProperty("description") &&
+              user.hasOwnProperty("avatar_url");
+          })
+        );
