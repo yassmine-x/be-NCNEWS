@@ -1,6 +1,7 @@
 const express = require("express");
 const getTopics = require("./controllers/topics.controller");
 const getArticle = require("./controllers/article_id.controller");
+const getUsers = require("./controllers/users.controller");
 const {
   errorNotFound,
   errorBadRequest,
@@ -12,6 +13,8 @@ const app = express();
 app.get("/api/topics", getTopics);
 
 app.get("/api/articles/:article_id", getArticle);
+
+app.get("/api/users", getUsers);
 
 /////////////////////////////////////////////////////////////////////////
 

@@ -67,3 +67,23 @@ describe("ERRORS FOR /api/articles/:article_id", () => {
       });
   });
 });
+
+describe("GET/api/users", () => {
+  test("status:200 responds with all the users", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then(({ body }) => {
+        const { users } = body;
+        expect(Array.isArray(users)).toBe(true);
+        expect(users).toHaveLength(4);
+        expect(
+          users.every((user) => {
+            user.hasOwnProperty("slug") &&
+              user.hasOwnProperty("description") &&
+              user.hasOwnProperty("avatar_url");
+          })
+        );
+      });
+  });
+});
