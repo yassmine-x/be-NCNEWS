@@ -68,7 +68,7 @@ describe("ERRORS FOR /api/articles/:article_id", () => {
   });
 });
 
-describe.only("5. PATCH /api/articles/:article_id", () => {
+describe("PATCH /api/articles/:article_id", () => {
   test("status:200, responds with the article", () => {
     const votesChange = { inc_votes: 100 };
     return request(app)
@@ -89,7 +89,7 @@ describe.only("5. PATCH /api/articles/:article_id", () => {
   });
 });
 
-describe.only("ERRORS FOR PATCH/api/articles/:article_id", () => {
+describe("ERRORS FOR PATCH/api/articles/:article_id", () => {
   test("responds with 400 if invalid id type is passed", () => {
     const votesChange = { inc_votes: 100 };
     return request(app)
@@ -125,11 +125,9 @@ describe.only("ERRORS FOR PATCH/api/articles/:article_id", () => {
     return request(app)
       .patch("/api/articles/1")
       .send(votesChange)
-      .expect(400)
+      .expect(407)
       .then(({ body }) => {
-        expect(body.msg).toBe("Bad Request!");
+        expect(body.msg).toBe("Please enter a vote");
       });
   });
 });
-
-describe.only("test", () => {});

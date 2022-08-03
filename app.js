@@ -7,6 +7,7 @@ const {
   errorBadRequest,
   customError,
   devError,
+  errorCantBeNull,
 } = require("./errors");
 const app = express();
 app.use(express.json());
@@ -24,6 +25,8 @@ app.all("/*", errorNotFound);
 app.use(errorNotFound);
 
 app.use(errorBadRequest);
+
+app.use(errorCantBeNull);
 
 app.use(customError);
 
