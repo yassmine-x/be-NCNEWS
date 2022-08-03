@@ -1,8 +1,11 @@
 const db = require("../db/connection");
 
-const fetchArticle = (id) => {
+const updateVotes = (id, patchRequestInc) => {
   return db
-    .query("SELECT * FROM articles WHERE article_id = $1", [id])
+    .query(
+      "UPDATE articles SET votes=votes+$2 WHERE article_id=$1 RETURNING *",
+      [id, patchRequestInc]
+    )
     .then(({ rows: article }) => {
       if (article.length === 0) {
         return Promise.reject({ status: 404, msg: "Article not found" });
@@ -12,4 +15,4 @@ const fetchArticle = (id) => {
     });
 };
 
-module.exports = fetchArticle;
+module.exports = updateVotes;

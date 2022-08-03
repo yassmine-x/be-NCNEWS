@@ -1,26 +1,40 @@
 const express = require("express");
 const getTopics = require("./controllers/topics.controller");
 const getArticle = require("./controllers/article_id.controller");
+
 const getUsers = require("./controllers/users.controller");
+
+const patchVotes = require("./controllers/changeVote.controller");
+
 const {
   errorNotFound,
   errorBadRequest,
   customError,
   devError,
+  errorCantBeNull,
 } = require("./errors");
 const app = express();
+app.use(express.json());
 
 app.get("/api/topics", getTopics);
 
 app.get("/api/articles/:article_id", getArticle);
 
+
 app.get("/api/users", getUsers);
+
+app.patch("/api/articles/:article_id", patchVotes);
+
 
 /////////////////////////////////////////////////////////////////////////
 
 app.all("/*", errorNotFound);
 
+app.use(errorNotFound);
+
 app.use(errorBadRequest);
+
+app.use(errorCantBeNull);
 
 app.use(customError);
 
