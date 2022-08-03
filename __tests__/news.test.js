@@ -67,3 +67,67 @@ describe("ERRORS FOR /api/articles/:article_id", () => {
       });
   });
 });
+
+describe("PATCH /api/articles/:article_id", () => {
+  test("status:200, responds with the article", () => {
+    const votesChange = { inc_votes: 100 };
+    return request(app)
+      .patch("/api/articles/1")
+      .send(votesChange)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toEqual({
+          article_id: 1,
+          title: "Living in the shadow of a great man",
+          topic: "mitch",
+          author: "butter_bridge",
+          body: "I find this existence challenging",
+          created_at: expect.any(String),
+          votes: 200,
+        });
+      });
+  });
+});
+
+describe("ERRORS FOR PATCH/api/articles/:article_id", () => {
+  test("responds with 400 if invalid id type is passed", () => {
+    const votesChange = { inc_votes: 100 };
+    return request(app)
+      .patch("/api/articles/blorp")
+      .send(votesChange)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request!");
+      });
+  });
+  test("responds with 404 if passed with valid iD but not present in database", () => {
+    const votesChange = { inc_votes: 100 };
+    return request(app)
+      .patch("/api/articles/10000")
+      .send(votesChange)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Article not found");
+      });
+  });
+  test("responds with 400 if invalid patch type is passed with incorrect type", () => {
+    const votesChange = { inc_votes: "hello" };
+    return request(app)
+      .patch("/api/articles/1")
+      .send(votesChange)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request!");
+      });
+  });
+  test("responds with 400 if invalid patch type is passed, missing required fields", () => {
+    const votesChange = {};
+    return request(app)
+      .patch("/api/articles/1")
+      .send(votesChange)
+      .expect(407)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Please enter a vote");
+      });
+  });
+});

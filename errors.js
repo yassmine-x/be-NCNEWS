@@ -9,6 +9,14 @@ exports.errorBadRequest = (err, req, res, next) => {
     next(err);
   }
 };
+
+exports.errorCantBeNull = (err, req, res, next) => {
+  if (err.code === "23502") {
+    res.status(407).send({ msg: "Please enter a vote" });
+  } else {
+    next(err);
+  }
+};
 exports.customError = (err, req, res, next) => {
   if (err.status) {
     res.status(err.status).send({ msg: err.msg });
