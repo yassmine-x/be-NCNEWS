@@ -3,7 +3,7 @@ const request = require("supertest");
 const data = require("../db/data/test-data/index");
 const seed = require("../db/seeds/seed");
 const db = require("../db/connection");
-console.log(data.articleData.length);
+
 
 afterAll(() => {
   return db.end();
