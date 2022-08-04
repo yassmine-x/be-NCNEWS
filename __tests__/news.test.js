@@ -36,15 +36,18 @@ describe("GET /api/articles/:article_id", () => {
       .get(`/api/articles/${ARTICLE_ID}`)
       .expect(200)
       .then(({ body }) => {
-        expect(body.article).toEqual({
-          title: "Sony Vaio; or, The Laptop",
-          topic: "mitch",
-          author: "icellusedkars",
-          body: "Call me Mitchell. Some years ago—never mind how long precisely—having little or no money in my purse, and nothing particular to interest me on shore, I thought I would buy a laptop about a little and see the codey part of the world. It is a way I have of driving off the spleen and regulating the circulation. Whenever I find myself growing grim about the mouth; whenever it is a damp, drizzly November in my soul; whenever I find myself involuntarily pausing before coffin warehouses, and bringing up the rear of every funeral I meet; and especially whenever my hypos get such an upper hand of me, that it requires a strong moral principle to prevent me from deliberately stepping into the street, and methodically knocking people’s hats off—then, I account it high time to get to coding as soon as I can. This is my substitute for pistol and ball. With a philosophical flourish Cato throws himself upon his sword; I quietly take to the laptop. There is nothing surprising in this. If they but knew it, almost all men in their degree, some time or other, cherish very nearly the same feelings towards the the Vaio with me.",
-          created_at: expect.any(String),
-          votes: 0,
-          article_id: 2,
-        });
+        expect(body.article).toEqual(
+          expect.objectContaining({
+            title: "Sony Vaio; or, The Laptop",
+            topic: "mitch",
+            author: "icellusedkars",
+            body: "Call me Mitchell. Some years ago—never mind how long precisely—having little or no money in my purse, and nothing particular to interest me on shore, I thought I would buy a laptop about a little and see the codey part of the world. It is a way I have of driving off the spleen and regulating the circulation. Whenever I find myself growing grim about the mouth; whenever it is a damp, drizzly November in my soul; whenever I find myself involuntarily pausing before coffin warehouses, and bringing up the rear of every funeral I meet; and especially whenever my hypos get such an upper hand of me, that it requires a strong moral principle to prevent me from deliberately stepping into the street, and methodically knocking people’s hats off—then, I account it high time to get to coding as soon as I can. This is my substitute for pistol and ball. With a philosophical flourish Cato throws himself upon his sword; I quietly take to the laptop. There is nothing surprising in this. If they but knew it, almost all men in their degree, some time or other, cherish very nearly the same feelings towards the the Vaio with me.",
+            created_at: expect.any(String),
+            votes: 0,
+            article_id: 2,
+            comment_count: 0,
+          })
+        );
       });
   });
 });
@@ -75,16 +78,18 @@ describe("PATCH /api/articles/:article_id", () => {
       .patch("/api/articles/1")
       .send(votesChange)
       .expect(200)
-      .then(({ body }) => {
-        expect(body).toEqual({
-          article_id: 1,
-          title: "Living in the shadow of a great man",
-          topic: "mitch",
-          author: "butter_bridge",
-          body: "I find this existence challenging",
-          created_at: expect.any(String),
-          votes: 200,
-        });
+      .then(({ body: singleArticle }) => {
+        expect(singleArticle).toEqual(
+          expect.objectContaining({
+            article_id: 1,
+            title: "Living in the shadow of a great man",
+            topic: "mitch",
+            author: "butter_bridge",
+            body: "I find this existence challenging",
+            created_at: expect.any(String),
+            votes: 200,
+          })
+        );
       });
   });
 });
@@ -132,7 +137,7 @@ describe("ERRORS FOR PATCH/api/articles/:article_id", () => {
   });
 });
 
-describe("GET/api/users", () => {
+describe("GET/api/articles", () => {
   test("status:200 responds with all the users", () => {
     return request(app)
       .get("/api/users")
@@ -148,6 +153,60 @@ describe("GET/api/users", () => {
               user.hasOwnProperty("avatar_url");
           })
         );
+      });
+  });
+});
+
+
+
+
+describe("GET /api/articles/:article_id with Comment Count", () => {
+  test("status:200, responds with a single matching article, with a commentCount key", () => {
+    const ARTICLE_ID = 1;
+    return request(app)
+      .get(`/api/articles/${ARTICLE_ID}`)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.article).toEqual({
+          article_id: 1,
+          title: "Living in the shadow of a great man",
+          topic: "mitch",
+          author: "butter_bridge",
+          body: "I find this existence challenging",
+          created_at: expect.any(String),
+          votes: 100,
+          comment_count: 11,
+        });
+
+      });
+  });
+});
+
+
+
+describe("GET/api/articles", () => {
+  test("status:200 responds with all the articles", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(Array.isArray(articles)).toBe(true);
+        expect(articles).toHaveLength(12);
+        expect(
+          articles.every((article) => {
+            article.hasOwnProperty("author") &&
+              article.hasOwnProperty("title") &&
+              article.hasOwnProperty("article_id") &&
+              article.hasOwnProperty("created_at") &&
+              article.hasOwnProperty("votes") &&
+              article.hasOwnProperty("comment_count");
+          })
+        );
+        expect(data.articleData).toBeSorted("created_at", {
+          descending: true,
+        });
+
       });
   });
 });
@@ -180,9 +239,7 @@ describe("GET/api/articles/:article_id/comments", () => {
         const { comments } = body;
         expect(Array.isArray(comments)).toBe(true);
         expect(comments).toHaveLength(0);
-      });
-  });
-});
+        })})})
 
 describe("ERRORS FOR GET/api/articles/:article_id/comments", () => {
   test("responds with 400 if invalid id type is passed", () => {
@@ -199,6 +256,7 @@ describe("ERRORS FOR GET/api/articles/:article_id/comments", () => {
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toBe("Article not found");
+        
       });
   });
 });
