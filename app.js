@@ -25,6 +25,7 @@ app.patch("/api/articles/:article_id", patchVotes);
 
 app.get("/api/articles", getArticles);
 
+
 /////////////////////////////////////////////////////////////////////////
 
 app.all("/*", errorNotFound);
