@@ -1,10 +1,9 @@
 const express = require("express");
 const getTopics = require("./controllers/topics.controller");
 const getArticle = require("./controllers/article_id.controller");
-
 const getUsers = require("./controllers/users.controller");
-
 const patchVotes = require("./controllers/changeVote.controller");
+const getComments = require("./controllers/gettingComments.controller");
 
 const {
   errorNotFound,
@@ -20,11 +19,11 @@ app.get("/api/topics", getTopics);
 
 app.get("/api/articles/:article_id", getArticle);
 
-
 app.get("/api/users", getUsers);
 
 app.patch("/api/articles/:article_id", patchVotes);
 
+app.get("/api/articles/:article_id/comments", getComments);
 
 /////////////////////////////////////////////////////////////////////////
 

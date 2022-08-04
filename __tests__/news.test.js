@@ -68,7 +68,6 @@ describe("ERRORS FOR /api/articles/:article_id", () => {
   });
 });
 
-
 describe("PATCH /api/articles/:article_id", () => {
   test("status:200, responds with the article", () => {
     const votesChange = { inc_votes: 100 };
@@ -129,7 +128,6 @@ describe("ERRORS FOR PATCH/api/articles/:article_id", () => {
       .expect(407)
       .then(({ body }) => {
         expect(body.msg).toBe("Please enter a vote");
-
       });
   });
 });
@@ -150,3 +148,47 @@ describe("GET/api/users", () => {
               user.hasOwnProperty("avatar_url");
           })
         );
+      });
+  });
+});
+
+describe("GET/api/articles/:article_id/comments", () => {
+  test("status:200 responds with all the comments", () => {
+    return request(app)
+      .get("/api/articles/9/comments")
+      .expect(200)
+      .then(({ body }) => {
+        const { comments } = body;
+        expect(Array.isArray(comments)).toBe(true);
+        expect(comments).toHaveLength(2);
+        expect(
+          comments.every((comment) => {
+            comment.hasOwnProperty("comment_id") &&
+              comment.hasOwnProperty("votes") &&
+              comment.hasOwnProperty("created_at") &&
+              comment.hasOwnProperty("author") &&
+              comment.hasOwnProperty("body");
+          })
+        );
+      });
+  });
+});
+
+describe("ERRORS FOR GET/api/articles/:article_id/comments", () => {
+  test("responds with 400 if invalid id type is passed", () => {
+    return request(app)
+      .get("/api/articles/blorp")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request!");
+      });
+  });
+  test("responds with 404 if passed with valid iD but not present in database", () => {
+    return request(app)
+      .get("/api/articles/10000")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Article not found");
+      });
+  });
+});
