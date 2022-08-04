@@ -157,9 +157,6 @@ describe("GET/api/articles", () => {
   });
 });
 
-
-
-
 describe("GET /api/articles/:article_id with Comment Count", () => {
   test("status:200, responds with a single matching article, with a commentCount key", () => {
     const ARTICLE_ID = 1;
@@ -177,12 +174,9 @@ describe("GET /api/articles/:article_id with Comment Count", () => {
           votes: 100,
           comment_count: 11,
         });
-
       });
   });
 });
-
-
 
 describe("GET/api/articles", () => {
   test("status:200 responds with all the articles", () => {
@@ -206,7 +200,6 @@ describe("GET/api/articles", () => {
         expect(data.articleData).toBeSorted("created_at", {
           descending: true,
         });
-
       });
   });
 });
@@ -239,7 +232,9 @@ describe("GET/api/articles/:article_id/comments", () => {
         const { comments } = body;
         expect(Array.isArray(comments)).toBe(true);
         expect(comments).toHaveLength(0);
-        })})})
+      });
+  });
+});
 
 describe("ERRORS FOR GET/api/articles/:article_id/comments", () => {
   test("responds with 400 if invalid id type is passed", () => {
@@ -256,7 +251,73 @@ describe("ERRORS FOR GET/api/articles/:article_id/comments", () => {
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toBe("Article not found");
-        
+      });
+  });
+});
+
+describe.only("POST /api/articles/:article_id/comments", () => {
+  test("status:200, responds with the comment", () => {
+    const postComment = {
+      username: "butter_bridge",
+      body: "What a fantastic Article <3",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(postComment)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.userComment).toEqual(
+          expect.objectContaining({
+            body: "What a fantastic Article <3",
+            article_id: 1,
+            author: "butter_bridge",
+            votes: 0,
+            created_at: expect.any(String),
+          })
+        );
+      });
+  });
+});
+
+describe("ERRORS FOR POST/api/articles/comments", () => {
+  test("responds with 400 if invalid id type is passed", () => {
+    const postComment = { user: "butter_bridge", body: "fantastic!" };
+    return request(app)
+      .post("/api/articles/blorp/comments")
+      .send(postComment)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request!");
+      });
+  });
+  test("responds with 404 if passed with valid iD but not present in database", () => {
+    const postComment = { user: "butter_bridge", body: "fantastic!" };
+    return request(app)
+      .post("/api/articles/10000/comments")
+      .send(postComment)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Article not found");
+      });
+  });
+  test("responds with 400 if invalid post type is passed, with incorrect username", () => {
+    const postComment = { user: "butter_bridgeS", body: "fantastic!" };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(postComment)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request!");
+      });
+  });
+  test("responds with 407 if invalid post type is passed, missing required fields", () => {
+    const postComment = {};
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(postComment)
+      .expect(407)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Please enter valid type in required fields");
       });
   });
 });

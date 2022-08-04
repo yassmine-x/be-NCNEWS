@@ -29,7 +29,7 @@ app.get("/api/articles", getArticles);
 
 app.get("/api/articles/:article_id/comments", getComments);
 
-app.get("/api/articles/:article_id/comments", postComment);
+app.post("/api/articles/:article_id/comments", postComment);
 
 /////////////////////////////////////////////////////////////////////////
 
