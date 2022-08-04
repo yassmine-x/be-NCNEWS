@@ -4,6 +4,7 @@ const data = require("../db/data/test-data/index");
 const seed = require("../db/seeds/seed");
 const db = require("../db/connection");
 
+
 afterAll(() => {
   return db.end();
 });
@@ -137,7 +138,7 @@ describe("ERRORS FOR PATCH/api/articles/:article_id", () => {
   });
 });
 
-describe("GET/api/users", () => {
+describe("GET/api/articles", () => {
   test("status:200 responds with all the users", () => {
     return request(app)
       .get("/api/users")
@@ -157,6 +158,7 @@ describe("GET/api/users", () => {
   });
 });
 
+
 describe("GET /api/articles/:article_id with Comment Count", () => {
   test("status:200, responds with a single matching article, with a commentCount key", () => {
     const ARTICLE_ID = 1;
@@ -173,7 +175,30 @@ describe("GET /api/articles/:article_id with Comment Count", () => {
           created_at: expect.any(String),
           votes: 100,
           comment_count: 11,
+
         });
       });
   });
 });
+
+describe("GET/api/articles", () => {
+  test("status:200 responds with all the articles", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(Array.isArray(articles)).toBe(true);
+        expect(articles).toHaveLength(12);
+        expect(
+          articles.every((article) => {
+            article.hasOwnProperty("author") &&
+              article.hasOwnProperty("title") &&
+              article.hasOwnProperty("article_id") &&
+              article.hasOwnProperty("created_at") &&
+              article.hasOwnProperty("votes") &&
+              article.hasOwnProperty("comment_count");
+          })
+        );
+        expect(data.articleData).toBeSorted("created_at", {
+          descending: true,
