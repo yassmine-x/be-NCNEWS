@@ -157,6 +157,9 @@ describe("GET/api/articles", () => {
   });
 });
 
+
+
+
 describe("GET /api/articles/:article_id with Comment Count", () => {
   test("status:200, responds with a single matching article, with a commentCount key", () => {
     const ARTICLE_ID = 1;
@@ -174,9 +177,12 @@ describe("GET /api/articles/:article_id with Comment Count", () => {
           votes: 100,
           comment_count: 11,
         });
+
       });
   });
 });
+
+
 
 describe("GET/api/articles", () => {
   test("status:200 responds with all the articles", () => {
@@ -200,6 +206,57 @@ describe("GET/api/articles", () => {
         expect(data.articleData).toBeSorted("created_at", {
           descending: true,
         });
+
+      });
+  });
+});
+
+describe("GET/api/articles/:article_id/comments", () => {
+  test("status:200 responds with all the comments", () => {
+    return request(app)
+      .get("/api/articles/9/comments")
+      .expect(200)
+      .then(({ body }) => {
+        const { comments } = body;
+        expect(Array.isArray(comments)).toBe(true);
+        expect(comments).toHaveLength(2);
+        expect(
+          comments.every((comment) => {
+            comment.hasOwnProperty("comment_id") &&
+              comment.hasOwnProperty("votes") &&
+              comment.hasOwnProperty("created_at") &&
+              comment.hasOwnProperty("author") &&
+              comment.hasOwnProperty("body");
+          })
+        );
+      });
+  });
+  test("status:200 responds with all the comments when no comments exist for that article", () => {
+    return request(app)
+      .get("/api/articles/2/comments")
+      .expect(200)
+      .then(({ body }) => {
+        const { comments } = body;
+        expect(Array.isArray(comments)).toBe(true);
+        expect(comments).toHaveLength(0);
+        })})})
+
+describe("ERRORS FOR GET/api/articles/:article_id/comments", () => {
+  test("responds with 400 if invalid id type is passed", () => {
+    return request(app)
+      .get("/api/articles/blorp")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request!");
+      });
+  });
+  test("responds with 404 if passed with valid iD but not present in database", () => {
+    return request(app)
+      .get("/api/articles/10000")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Article not found");
+        
       });
   });
 });
