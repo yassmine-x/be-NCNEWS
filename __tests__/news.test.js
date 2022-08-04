@@ -4,7 +4,6 @@ const data = require("../db/data/test-data/index");
 const seed = require("../db/seeds/seed");
 const db = require("../db/connection");
 
-
 afterAll(() => {
   return db.end();
 });
@@ -158,7 +157,6 @@ describe("GET/api/articles", () => {
   });
 });
 
-
 describe("GET /api/articles/:article_id with Comment Count", () => {
   test("status:200, responds with a single matching article, with a commentCount key", () => {
     const ARTICLE_ID = 1;
@@ -175,7 +173,6 @@ describe("GET /api/articles/:article_id with Comment Count", () => {
           created_at: expect.any(String),
           votes: 100,
           comment_count: 11,
-
         });
       });
   });
@@ -202,3 +199,7 @@ describe("GET/api/articles", () => {
         );
         expect(data.articleData).toBeSorted("created_at", {
           descending: true,
+        });
+      });
+  });
+});
