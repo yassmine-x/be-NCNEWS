@@ -172,6 +172,16 @@ describe("GET/api/articles/:article_id/comments", () => {
         );
       });
   });
+  test("status:200 responds with all the comments when no comments exist for that article", () => {
+    return request(app)
+      .get("/api/articles/2/comments")
+      .expect(200)
+      .then(({ body }) => {
+        const { comments } = body;
+        expect(Array.isArray(comments)).toBe(true);
+        expect(comments).toHaveLength(0);
+      });
+  });
 });
 
 describe("ERRORS FOR GET/api/articles/:article_id/comments", () => {
