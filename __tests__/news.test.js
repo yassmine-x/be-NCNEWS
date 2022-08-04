@@ -3,6 +3,7 @@ const request = require("supertest");
 const data = require("../db/data/test-data/index");
 const seed = require("../db/seeds/seed");
 const db = require("../db/connection");
+console.log(data.articleData.length);
 
 afterAll(() => {
   return db.end();
@@ -68,7 +69,6 @@ describe("ERRORS FOR /api/articles/:article_id", () => {
   });
 });
 
-
 describe("PATCH /api/articles/:article_id", () => {
   test("status:200, responds with the article", () => {
     const votesChange = { inc_votes: 100 };
@@ -129,12 +129,11 @@ describe("ERRORS FOR PATCH/api/articles/:article_id", () => {
       .expect(407)
       .then(({ body }) => {
         expect(body.msg).toBe("Please enter a vote");
-
       });
   });
 });
 
-describe("GET/api/users", () => {
+describe("GET/api/articles", () => {
   test("status:200 responds with all the users", () => {
     return request(app)
       .get("/api/users")
@@ -150,3 +149,32 @@ describe("GET/api/users", () => {
               user.hasOwnProperty("avatar_url");
           })
         );
+      });
+  });
+});
+
+describe("GET/api/articles", () => {
+  test("status:200 responds with all the articles", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(Array.isArray(articles)).toBe(true);
+        expect(articles).toHaveLength(12);
+        expect(
+          articles.every((article) => {
+            article.hasOwnProperty("author") &&
+              article.hasOwnProperty("title") &&
+              article.hasOwnProperty("article_id") &&
+              article.hasOwnProperty("created_at") &&
+              article.hasOwnProperty("votes") &&
+              article.hasOwnProperty("comment_count");
+          })
+        );
+        expect(data.articleData).toBeSorted("created_at", {
+          descending: true,
+        });
+      });
+  });
+});

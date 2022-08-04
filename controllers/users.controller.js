@@ -1,8 +1,8 @@
 const fetchUsers = require("../models/users.model");
 
 const getUsers = (req, res) => {
-  fetchUsers().then((Users) => {
-    res.send(Users);
+  fetchUsers().then((users) => {
+    res.send(users);
   });
 };
 
