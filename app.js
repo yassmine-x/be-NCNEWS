@@ -5,6 +5,7 @@ const getUsers = require("./controllers/users.controller");
 const patchVotes = require("./controllers/changeVote.controller");
 const getArticles = require("./controllers/all_articles.controller");
 const getComments = require("./controllers/gettingComments.controller");
+const postComment = require("./controllers/addingComment.controller");
 
 const {
   errorNotFound,
@@ -28,6 +29,7 @@ app.get("/api/articles", getArticles);
 
 app.get("/api/articles/:article_id/comments", getComments);
 
+app.get("/api/articles/:article_id/comments", postComment);
 
 /////////////////////////////////////////////////////////////////////////
 
