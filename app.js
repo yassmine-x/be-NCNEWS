@@ -4,8 +4,8 @@ const getArticle = require("./controllers/article_id.controller");
 const getUsers = require("./controllers/users.controller");
 const patchVotes = require("./controllers/changeVote.controller");
 const getArticles = require("./controllers/all_articles.controller");
-const getComments = require("./controllers/gettingComments.controller");
 const postComment = require("./controllers/addingComment.controller");
+const getComments = require("./controllers/gettingComments.controller");
 
 const {
   errorNotFound,
@@ -13,6 +13,8 @@ const {
   customError,
   devError,
   errorCantBeNull,
+  trial,
+  articleNotFound,
 } = require("./errors");
 const app = express();
 app.use(express.json());
@@ -33,8 +35,6 @@ app.post("/api/articles/:article_id/comments", postComment);
 
 /////////////////////////////////////////////////////////////////////////
 
-app.all("/*", errorNotFound);
-
 app.use(errorNotFound);
 
 app.use(errorBadRequest);
@@ -42,6 +42,10 @@ app.use(errorBadRequest);
 app.use(errorCantBeNull);
 
 app.use(customError);
+
+app.all("/*", errorNotFound);
+
+app.use(articleNotFound);
 
 app.use(devError);
 

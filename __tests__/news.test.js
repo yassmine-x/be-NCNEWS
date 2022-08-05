@@ -132,7 +132,7 @@ describe("ERRORS FOR PATCH/api/articles/:article_id", () => {
       .send(votesChange)
       .expect(407)
       .then(({ body }) => {
-        expect(body.msg).toBe("Please enter a vote");
+        expect(body.msg).toBe("Please enter valid type in required fields");
       });
   });
 });
@@ -255,10 +255,10 @@ describe("ERRORS FOR GET/api/articles/:article_id/comments", () => {
   });
 });
 
-describe.only("POST /api/articles/:article_id/comments", () => {
+describe("POST /api/articles/:article_id/comments", () => {
   test("status:200, responds with the comment", () => {
     const postComment = {
-      username: "butter_bridge",
+      user: "butter_bridge",
       body: "What a fantastic Article <3",
     };
     return request(app)
@@ -266,7 +266,7 @@ describe.only("POST /api/articles/:article_id/comments", () => {
       .send(postComment)
       .expect(200)
       .then(({ body }) => {
-        expect(body.userComment).toEqual(
+        expect(body.newComment).toEqual(
           expect.objectContaining({
             body: "What a fantastic Article <3",
             article_id: 1,
@@ -291,7 +291,7 @@ describe("ERRORS FOR POST/api/articles/comments", () => {
       });
   });
   test("responds with 404 if passed with valid iD but not present in database", () => {
-    const postComment = { user: "butter_bridge", body: "fantastic!" };
+    const postComment = { user: "icellusedkars", body: "fantastic!" };
     return request(app)
       .post("/api/articles/10000/comments")
       .send(postComment)
@@ -307,15 +307,15 @@ describe("ERRORS FOR POST/api/articles/comments", () => {
       .send(postComment)
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe("Bad Request!");
+        expect(body.msg).toBe("User not found");
       });
   });
-  test("responds with 407 if invalid post type is passed, missing required fields", () => {
+  test("responds with 400 if invalid post type is passed, missing required fields", () => {
     const postComment = {};
     return request(app)
       .post("/api/articles/1/comments")
       .send(postComment)
-      .expect(407)
+      .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("Please enter valid type in required fields");
       });

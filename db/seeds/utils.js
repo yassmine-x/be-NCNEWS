@@ -1,3 +1,4 @@
+const db = require("../connection");
 exports.convertTimestampToDate = ({ created_at, ...otherProperties }) => {
   if (!created_at) return { ...otherProperties };
   return { created_at: new Date(created_at), ...otherProperties };
@@ -19,4 +20,20 @@ exports.formatComments = (comments, idLookup) => {
       ...this.convertTimestampToDate(restOfComment),
     };
   });
+};
+
+exports.checkUserExists = (id) => {
+  return db
+    .query("SELECT username FROM users WHERE username=$1", [id])
+    .then(({ rows: username }) => {
+      return username;
+    });
+};
+
+exports.checkIDExists = (id) => {
+  return db
+    .query("SELECT article_id FROM articles WHERE article_id=$1", [id])
+    .then(({ rows: iD }) => {
+      return iD;
+    });
 };
