@@ -26,7 +26,6 @@ exports.customError = (err, req, res, next) => {
 };
 
 exports.devError = (err, req, res, next) => {
-  console.log(err);
   res.sendStatus(500);
 };
 
