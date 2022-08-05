@@ -12,7 +12,7 @@ exports.errorBadRequest = (err, req, res, next) => {
 
 exports.errorCantBeNull = (err, req, res, next) => {
   if (err.code === "23502") {
-    res.status(407).send({ msg: "Please enter a vote" });
+    res.status(407).send({ msg: "Please enter valid type in required fields" });
   } else {
     next(err);
   }
@@ -28,4 +28,10 @@ exports.customError = (err, req, res, next) => {
 exports.devError = (err, req, res, next) => {
   console.log(err);
   res.sendStatus(500);
+};
+
+exports.articleNotFound = (err, req, res, next) => {
+  if (err.code === "23503") {
+    res.status(404).send({ msg: "Article not found" });
+  }
 };
