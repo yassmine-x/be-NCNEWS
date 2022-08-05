@@ -30,10 +30,3 @@ exports.checkUserExists = (id) => {
     });
 };
 
-exports.checkIDExists = (id) => {
-  return db
-    .query("SELECT article_id FROM articles WHERE article_id=$1", [id])
-    .then(({ rows: iD }) => {
-      return iD;
-    });
-};
