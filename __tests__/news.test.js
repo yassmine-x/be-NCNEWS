@@ -137,7 +137,7 @@ describe("ERRORS FOR PATCH/api/articles/:article_id", () => {
   });
 });
 
-describe("GET/api/articles", () => {
+describe("GET/api/users", () => {
   test("status:200 responds with all the users", () => {
     return request(app)
       .get("/api/users")
@@ -148,8 +148,8 @@ describe("GET/api/articles", () => {
         expect(users).toHaveLength(4);
         expect(
           users.every((user) => {
-            user.hasOwnProperty("slug") &&
-              user.hasOwnProperty("description") &&
+            user.hasOwnProperty("username") &&
+              user.hasOwnProperty("name") &&
               user.hasOwnProperty("avatar_url");
           })
         );
@@ -318,6 +318,107 @@ describe("ERRORS FOR POST/api/articles/comments", () => {
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("Please enter valid type in required fields");
+      });
+  });
+});
+
+describe("GET /api/articles (queries)", () => {
+  test("handles sort by query,  which sorts the articles by any valid column (defaults to date)", () => {
+    return request(app)
+      .get("/api/articles?sort_by=title")
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(Array.isArray(articles)).toBe(true);
+        expect(articles).toHaveLength(12);
+
+        expect(
+          articles.every((article) => {
+            article.hasOwnProperty("author") &&
+              article.hasOwnProperty("title") &&
+              article.hasOwnProperty("article_id") &&
+              article.hasOwnProperty("created_at") &&
+              article.hasOwnProperty("votes") &&
+              article.hasOwnProperty("comment_count");
+          })
+        );
+        expect(articles).toBeSortedBy("title", {
+          descending: true,
+        });
+      });
+  });
+  test("handles order query, which can be set to asc or desc for ascending or descending (defaults to descending)", () => {
+    return request(app)
+      .get("/api/articles?order=ASC")
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(Array.isArray(articles)).toBe(true);
+        expect(articles).toHaveLength(12);
+
+        expect(
+          articles.every((article) => {
+            article.hasOwnProperty("author") &&
+              article.hasOwnProperty("title") &&
+              article.hasOwnProperty("article_id") &&
+              article.hasOwnProperty("created_at") &&
+              article.hasOwnProperty("votes") &&
+              article.hasOwnProperty("comment_count");
+          })
+        );
+        expect(articles).toBeSortedBy("created_at", {
+          descending: false,
+        });
+      });
+  });
+  test("handles topic query, which filters the articles by the topic value specified in the query", () => {
+    return request(app)
+      .get("/api/articles?topic=mitch")
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(Array.isArray(articles)).toBe(true);
+        expect(articles).toHaveLength(11);
+
+        expect(
+          articles.every((article) => {
+            article.hasOwnProperty("author") &&
+              article.hasOwnProperty("title") &&
+              article.hasOwnProperty("article_id") &&
+              article.hasOwnProperty("created_at") &&
+              article.hasOwnProperty("votes") &&
+              article.hasOwnProperty("comment_count") &&
+              article.hasOwnProperty("topic") &&
+              article.topic === "mitch";
+          })
+        );
+      });
+  });
+});
+
+describe("ERRORS FOR GET/api/articles (queries)", () => {
+  test("responds with 400 if passed with invalid sort by request or a column that doesnt exist", () => {
+    return request(app)
+      .get("/api/articles?sort_by=age")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Please enter a valid column");
+      });
+  });
+  test("responds with 400 if passed with invalid ORDER BY", () => {
+    return request(app)
+      .get("/api/articles?order=ascending")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Please order by ASC or DESC");
+      });
+  });
+  test("responds with 404 if topic doesn't exist", () => {
+    return request(app)
+      .get("/api/articles?topic=dogs")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Topic doesn't exist");
       });
   });
 });

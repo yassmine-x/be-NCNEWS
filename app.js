@@ -15,6 +15,7 @@ const {
   errorCantBeNull,
   trial,
   articleNotFound,
+  columnDoesNotExist,
 } = require("./errors");
 const app = express();
 app.use(express.json());
