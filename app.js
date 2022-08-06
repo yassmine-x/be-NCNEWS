@@ -6,6 +6,7 @@ const patchVotes = require("./controllers/changeVote.controller");
 const getArticles = require("./controllers/all_articles.controller");
 const postComment = require("./controllers/addingComment.controller");
 const getComments = require("./controllers/gettingComments.controller");
+const deleteComment = require("./controllers/deletingAComment.controller");
 
 const {
   errorNotFound,
@@ -33,6 +34,8 @@ app.get("/api/articles", getArticles);
 app.get("/api/articles/:article_id/comments", getComments);
 
 app.post("/api/articles/:article_id/comments", postComment);
+
+app.delete("/api/comments/:comment_id", deleteComment);
 
 /////////////////////////////////////////////////////////////////////////
 
