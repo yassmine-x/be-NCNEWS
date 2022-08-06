@@ -30,3 +30,10 @@ exports.checkUserExists = (id) => {
     });
 };
 
+exports.checkIDexists = (id) => {
+  return db
+    .query("SELECT comment_id FROM comments WHERE comment_id=$1", [id])
+    .then(({ rows }) => {
+      return rows;
+    });
+};

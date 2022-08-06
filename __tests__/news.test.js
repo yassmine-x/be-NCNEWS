@@ -422,3 +422,28 @@ describe("ERRORS FOR GET/api/articles (queries)", () => {
       });
   });
 });
+
+describe("DELETE /api/comments/:comment_id", () => {
+  test("Deletes the comment when end point is a valid ID number", () => {
+    return request(app).delete("/api/comments/2").expect(204);
+  });
+});
+
+describe("ERRORS for DELETE /api/comments/:comment_id", () => {
+  test("responds with 400 if invalid id type is passed", () => {
+    return request(app)
+      .delete("/api/comments/blorp")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request!");
+      });
+  });
+  test("responds with 404 if valid type passed but not present in database", () => {
+    return request(app)
+      .delete("/api/comments/999")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Comment not found");
+      });
+  });
+});
