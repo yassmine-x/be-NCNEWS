@@ -371,7 +371,7 @@ describe("GET /api/articles (queries)", () => {
         });
       });
   });
-  test.only("handles topic query, which filters the articles by the topic value specified in the query", () => {
+  test("handles topic query, which filters the articles by the topic value specified in the query", () => {
     return request(app)
       .get("/api/articles?topic=mitch")
       .expect(200)

@@ -6,7 +6,6 @@ const getArticles = (req, res, next) => {
 
   fetchArticles(sortby, ascOrDesc, whatTopic)
     .then((articles) => {
-      console.log(articles);
       res.send({ articles });
     })
     .catch((err) => {

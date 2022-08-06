@@ -14,17 +14,17 @@ const fetchArticles = (
   ];
 
   const allowedTopics = ["mitch", "cats"];
-  // if (!allowedColumns.includes(sortby)) {
-  //   return Promise.reject({ status: 400, msg: "Please enter a valid column" });
-  // }
+  if (!allowedColumns.includes(sortby)) {
+    return Promise.reject({ status: 400, msg: "Please enter a valid column" });
+  }
 
-  // if (!allowedTopics.includes(whatTopic)) {
-  //   return Promise.reject({ status: 400, msg: "Topic doesn't exist" });
-  // }
+  if (!allowedTopics.includes(whatTopic) && whatTopic !== undefined) {
+    return Promise.reject({ status: 400, msg: "Topic doesn't exist" });
+  }
 
-  // if (ascOrDesc !== "ASC" || ascOrDesc !== "DESC") {
-  //   return Promise.reject({ status: 400, msg: "Please order by ASC or DESC" });
-  // }
+  if (ascOrDesc !== "ASC" && ascOrDesc !== "DESC") {
+    return Promise.reject({ status: 400, msg: "Please order by ASC or DESC" });
+  }
 
   let whereClause = "";
   if (whatTopic !== undefined && allowedTopics.includes(whatTopic)) {
@@ -41,17 +41,8 @@ const fetchArticles = (
     });
   }
   return db.query(queryStr, [whatTopic]).then(({ rows }) => {
-    console.log(rows);
     return rows;
   });
 };
 
 module.exports = fetchArticles;
-
-// // } else if (!allowedColumns.includes(sortby)) {
-//     return Promise.reject({ status: 400, msg: "Please enter a valid column" });
-//   } else if (!allowedTopics.includes(whatTopic)) {
-//     return Promise.reject({ status: 400, msg: "Topic doesn't exist" });
-//   } else if (ascOrDesc !== "ASC" || ascOrDesc !== "DESC") {
-//     return Promise.reject({ status: 400, msg: "Please order by ASC or DESC" });
-//   }
