@@ -7,6 +7,7 @@ const getArticles = require("./controllers/all_articles.controller");
 const postComment = require("./controllers/addingComment.controller");
 const getComments = require("./controllers/gettingComments.controller");
 const deleteComment = require("./controllers/deletingAComment.controller");
+const getAllAPI = require("./controllers/getAPI.controller");
 
 const {
   errorNotFound,
@@ -18,6 +19,7 @@ const {
   articleNotFound,
   columnDoesNotExist,
 } = require("./errors");
+
 const app = express();
 app.use(express.json());
 
@@ -36,6 +38,8 @@ app.get("/api/articles/:article_id/comments", getComments);
 app.post("/api/articles/:article_id/comments", postComment);
 
 app.delete("/api/comments/:comment_id", deleteComment);
+
+app.get("/api", getAllAPI);
 
 /////////////////////////////////////////////////////////////////////////
 
