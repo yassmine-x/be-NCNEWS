@@ -3,6 +3,7 @@ const request = require("supertest");
 const data = require("../db/data/test-data/index");
 const seed = require("../db/seeds/seed");
 const db = require("../db/connection");
+const object = require("../endpoints.json");
 
 afterAll(() => {
   return db.end();
@@ -444,6 +445,16 @@ describe("ERRORS for DELETE /api/comments/:comment_id", () => {
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toBe("Comment not found");
+      });
+  });
+});
+describe("GET /api", () => {
+  test("Responds with endpoints.json object", () => {
+    return request(app)
+      .get("/api")
+      .expect(200)
+      .then((object) => {
+        expect(object).toEqual(object);
       });
   });
 });
