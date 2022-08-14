@@ -1,4 +1,3 @@
-const { checkIDexists } = require("../db/seeds/utils");
 const removeComment = require("../models/deletingAComment.model");
 
 const deleteComment = (req, res, next) => {
