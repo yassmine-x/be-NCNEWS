@@ -6,7 +6,7 @@ const patchVotes = require("./controllers/changeVote.controller");
 const getArticles = require("./controllers/all_articles.controller");
 const postComment = require("./controllers/addingComment.controller");
 const getComments = require("./controllers/gettingComments.controller");
-const deleteComment = require("./controllers/deletingAComment.controller");
+const deleteComment = require("./controllers/deletingComment.controller");
 const getAllAPI = require("./controllers/getAPI.controller");
 
 const {
