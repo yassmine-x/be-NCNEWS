@@ -9,6 +9,8 @@ const getComments = require("./controllers/gettingComments.controller");
 const deleteComment = require("./controllers/deletingComment.controller");
 const getAllAPI = require("./controllers/getAPI.controller");
 
+const cors = require("cors");
+
 const {
   errorNotFound,
   errorBadRequest,
@@ -19,6 +21,9 @@ const {
 } = require("./errors");
 
 const app = express();
+
+app.use(cors());
+
 app.use(express.json());
 
 app.get("/api/topics", getTopics);
