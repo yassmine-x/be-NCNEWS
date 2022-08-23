@@ -414,14 +414,14 @@ describe("ERRORS FOR GET/api/articles (queries)", () => {
         expect(body.msg).toBe("Please order by ASC or DESC");
       });
   });
-  test("responds with 404 if topic doesn't exist", () => {
-    return request(app)
-      .get("/api/articles?topic=dogs")
-      .expect(400)
-      .then(({ body }) => {
-        expect(body.msg).toBe("Topic doesn't exist");
-      });
-  });
+  // test("responds with 404 if topic doesn't exist", () => {
+  //   return request(app)
+  //     .get("/api/articles?topic=dogs")
+  //     .expect(400)
+  //     .then(({ body }) => {
+  //       expect(body.msg).toBe("Topic doesn't exist");
+  //     });
+  // });
 });
 
 describe("DELETE /api/comments/:comment_id", () => {

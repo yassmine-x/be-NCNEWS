@@ -18,9 +18,9 @@ const fetchArticles = (
     return Promise.reject({ status: 400, msg: "Please enter a valid column" });
   }
 
-  if (!allowedTopics.includes(whatTopic) && whatTopic !== undefined) {
-    return Promise.reject({ status: 400, msg: "Topic doesn't exist" });
-  }
+  // if (!allowedTopics.includes(whatTopic) && whatTopic !== undefined) {
+  //   return Promise.reject({ status: 400, msg: "Topic doesn't exist" });
+  // }
 
   if (ascOrDesc !== "ASC" && ascOrDesc !== "DESC") {
     return Promise.reject({ status: 400, msg: "Please order by ASC or DESC" });
