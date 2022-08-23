@@ -27,7 +27,7 @@ const fetchArticles = (
   }
 
   let whereClause = "";
-  if (whatTopic !== undefined && allowedTopics.includes(whatTopic)) {
+  if (whatTopic !== undefined) {
     whereClause = `WHERE articles.topic LIKE $1 `;
   }
   let queryStr =
