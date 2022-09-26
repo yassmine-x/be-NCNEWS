@@ -1,6 +1,6 @@
 ## What is be-NCNEWS?
 
-This is an api which fetches articles from a database, with various endpoints, given in the app.json file.
+This is an api which fetches articles from a database, with various endpoints, given in the `endpoints.json` file.
 
 This app uses NodeJS (version 18) and has an MVC architecture. The models and controllers are part of the back-end. Some of the tech used: JavaScript, Axios, Jest and Husky.
 
