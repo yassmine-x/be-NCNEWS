@@ -1,4 +1,4 @@
-## What is be-NCNEWS?
+# What is be-NCNEWS?
 
 This is an api which fetches articles from a database, with various endpoints, given in the `endpoints.json` file.
 
@@ -21,6 +21,6 @@ Use `npm test news.test` to run the test suite containing the tests associated w
 
 A list of available endpoints can be found in the `endpoints.json` file, or alternatively by use the endpoint `/api` within the app itself.
 
-### Final words
+## Final words
 
 This repo was designed to be used in conjunction with `fe-NCNEWS`. Feel free to also have a look at this repo (instructions and details in the README) and have yourself an enjoyable NC NEWS experience!
