@@ -21,4 +21,6 @@ Use `npm test news.test` to run the test suite containing the tests associated w
 
 A list of available endpoints can be found in the `endpoints.json` file, or alternatively by use the endpoint `/api` within the app itself.
 
-This repo was designed to be used with `fe-NCNEWS`. Feel free to also have a look at this repo (instruction and details in the README), and have yourself an enjoyable NC NEWS experience!
+### Final words
+
+This repo was designed to be used in conjunction with `fe-NCNEWS`. Feel free to also have a look at this repo (instructions and details in the README) and have yourself an enjoyable NC NEWS experience!
