@@ -24,3 +24,7 @@ A list of available endpoints can be found in the `endpoints.json` file, or alte
 ## Final words
 
 This repo was designed to be used in conjunction with `fe-NCNEWS`. Feel free to also have a look at this repo (instructions and details in the README) and have yourself an enjoyable NC NEWS experience!
+
+### Link to hosted site!
+
+https://yassmine-nc-news.netlify.app
